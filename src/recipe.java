@@ -123,9 +123,35 @@ public class recipe {
                     break;
                 case 4:
                     System.out.println("Update a Recipe");
+                    System.out.println("Enter Recipe name: ");
+                    recipeTitle = input.next();
+
+                    System.out.println("Enter the Recipe Description to update: ");
+                    recipeDesc = input.next();
+                    System.out.println("Update author of recipe: ");
+                    recipePreparedBy = input.next();
+                    System.out.println("Update Ingredients : ");
+                    recipeIngredients = input.next();
+                    System.out.println("Update Recipe Category(veg/nonveg): ");
+                    recipeCategory = input.next();
+
+
+                    try {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/recipedb", "root", "");
+                        String sql = "UPDATE `recipes` SET `description`='"+recipeDesc+"',`preparedby`='"+recipePreparedBy+"',`ingredients`='"+recipeIngredients+"',`recipecategory`='"+recipeCategory+"' WHERE `title` ='"+recipeTitle+"'";
+                        Statement stmt = con.createStatement();
+                        stmt.executeUpdate(sql);
+                        System.out.println("Rcipe updated successfully.");
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
 
 
                     break;
+
                 case 5:
                     System.out.println("Delete a Recipe");
                     System.out.println("Enter the Recipe name: ");
@@ -173,26 +199,105 @@ public class recipe {
                         System.out.println(e);
                     }
 
-
-
-
-                case 6:
-                    System.out.println("Display total recipes in each category");
-
-
-                    break;
-
                 case 7:
                     System.out.println("View recipes in a specific category");
+                    System.out.println("Enter the category search: ");
+                    recipeCategory = input.next();
+
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/recipedb", "root", "");
+                        String sql = "SELECT  `title`, `description`, `preparedby`, `ingredients` FROM `recipes` WHERE `recipecategory` = '"+recipeCategory+"'";
+
+
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchRecipeName = rs.getString("title");
+                            String fetchRecipeDesc = rs.getString("description");
+                            String fetchRecipePreparedBy = rs.getString("preparedby");
+                            String fetchRecipeIngredients = rs.getString("ingredients");
+
+
+                            System.out.println("Recipe Name: "+fetchRecipeName);
+                            System.out.println("Description : "+fetchRecipeDesc);
+                            System.out.println("Prepared By : "+fetchRecipePreparedBy);
+                            System.out.println("Ingredients : "+fetchRecipeIngredients+"\n");
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
 
                     break;
                 case 8:
                     System.out.println("Search a recipe using first letter");
+                    System.out.println("Enter the first letter to search: ");
+                    String recipeLetter = input.next();
+
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/recipedb", "root", "");
+                        String sql = "SELECT  `title`, `description`, `preparedby`, `ingredients`, `recipecategory` FROM `recipes` WHERE `title` LIKE'"+recipeLetter+"%'";
+
+
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchRecipeName = rs.getString("title");
+                            String fetchRecipeDesc = rs.getString("description");
+                            String fetchRecipePreparedBy = rs.getString("preparedby");
+                            String fetchRecipeIngredients = rs.getString("ingredients");
+                            String fetchRecipeCategory = rs.getString("recipecategory");
+
+                            System.out.println("Recipe Name: "+fetchRecipeName);
+                            System.out.println("Description : "+fetchRecipeDesc);
+                            System.out.println("Prepared By : "+fetchRecipePreparedBy);
+                            System.out.println("Ingredients : "+fetchRecipeIngredients);
+                            System.out.println("Category : "+fetchRecipeCategory+"\n");
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
 
 
                     break;
                 case 9:
                     System.out.println("View recipes prepared by a specific person");
+                    System.out.println("Enter the Chefs name to search: ");
+                    String recipeChef = input.next();
+
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/recipedb", "root", "");
+                        String sql = "SELECT  `title`, `description`,`ingredients`, `recipecategory` FROM `recipes` WHERE `preparedby` ='"+recipeChef+"'";
+
+
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchRecipeName = rs.getString("title");
+                            String fetchRecipeDesc = rs.getString("description");
+                            String fetchRecipeIngredients = rs.getString("ingredients");
+                            String fetchRecipeCategory = rs.getString("recipecategory");
+
+                            System.out.println("Recipe Name: "+fetchRecipeName);
+                            System.out.println("Description : "+fetchRecipeDesc);
+                            System.out.println("Ingredients : "+fetchRecipeIngredients);
+                            System.out.println("Category : "+fetchRecipeCategory+"\n");
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
 
 
 
